@@ -31,20 +31,21 @@ public class ClasseController {
     }
 
     @PutMapping("/{id}/modifier")
-    public Classe modifier(@PathVariable Long id, Classe classe){
+    public Classe modifier(@PathVariable Long id, @RequestBody Classe classe) {
         Classe classe1 = classeService.findById(id);
-        if(!classe1.equals(classe) && classe != null){
-            if(classe.getFormation() != null){
+
+        if (classe != null) {
+            if (classe.getFormation() != null) {
                 classe1.setFormation(classe.getFormation());
             }
-            if(classe.isArchive()){
-                classe1.setArchive(true);
-            }else{
-                classe1.setArchive(false);
-            }
+            classe1.setNiveau(classe.getNiveau());
+            classe1.setArchive(classe.isArchive());
+
         }
+
         return classeService.update(classe1);
     }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){

@@ -25,9 +25,12 @@ public class FormationController {
     }
 
     @PutMapping("/{id}/modifierFormation")
-    public Formation modifierFormation(@PathVariable Long id,String intitule){
+    public Formation modifierFormation(@PathVariable Long id,@RequestBody Formation formation1){
         Formation formation = formationService.findById(id);
-        formation.setIntitule(intitule);
+        if(formation1.getIntitule() != null){
+            formation.setIntitule(formation1.getIntitule());
+        }
+        formation.setArchive(formation1.isArchive());
         return formationService.update(formation);
     }
 

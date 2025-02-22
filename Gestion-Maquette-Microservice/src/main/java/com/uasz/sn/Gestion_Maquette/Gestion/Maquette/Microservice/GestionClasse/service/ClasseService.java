@@ -18,13 +18,7 @@ public class ClasseService {
 
 
     public Classe update(Classe classe){
-        Classe existing = classeRepository.findById(classe.getId()).get();
-        if(existing == null){
-            return null;
-        }else {
-            existing.setNiveau(classe.getNiveau());
-            return classeRepository.save(existing);
-        }
+        return classeRepository.save(classe);
     }
 
     public void delete(Classe classe){
