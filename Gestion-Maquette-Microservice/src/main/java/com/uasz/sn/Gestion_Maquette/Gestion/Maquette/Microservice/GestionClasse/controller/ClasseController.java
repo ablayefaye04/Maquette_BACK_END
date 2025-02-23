@@ -44,7 +44,9 @@ public class ClasseController {
                 classe.setFormation(classeDetails.getFormation());
             }
             classe.setNiveau(classeDetails.getNiveau());
-            classe.setArchive(classeDetails.isArchive());
+            if(classe.isArchive() != classeDetails.isArchive()){
+                classe.setArchive(classeDetails.isArchive());
+            }
             Classe updatedClasse = classeService.update(classe);
             return ResponseEntity.ok(updatedClasse);
         }

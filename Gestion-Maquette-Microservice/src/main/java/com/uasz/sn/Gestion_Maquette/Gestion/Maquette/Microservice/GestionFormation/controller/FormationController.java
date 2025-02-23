@@ -28,7 +28,7 @@ public class FormationController {
         return new ResponseEntity<>(nouvelleFormation, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/modifierFormation")
+    @PutMapping("/{id}/modifier")
     public ResponseEntity<Formation> modifierFormation(@PathVariable Long id, @RequestBody Formation formation1) {
         Formation formation = formationService.findById(id);
         if (formation == null) {
@@ -42,7 +42,7 @@ public class FormationController {
         return new ResponseEntity<>(formationModifiee, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/supprimerFormation")
+    @DeleteMapping("/{id}/supprimer")
     public ResponseEntity<List<Formation>> supprimerFormation(@PathVariable Long id) {
         Formation formation = formationService.findById(id);
         if (formation == null) {
@@ -59,8 +59,12 @@ public class FormationController {
         if (formation == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        formationService.archiver(id);
-        Formation formationArchivee = formationService.findById(id);
+        if(formation.isArchive()){
+            formation.setArchive(false);
+        }else{
+            formation.setArchive(true);
+        }
+        Formation formationArchivee = formationService.update(formation);
         return new ResponseEntity<>(formationArchivee, HttpStatus.OK);
     }
 
