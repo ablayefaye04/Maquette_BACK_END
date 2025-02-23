@@ -22,8 +22,10 @@ public class Classe {
     private Long id;
 
     @Column(nullable = false,unique = true)
-        private int niveau;
+    private int niveau;
     @ManyToOne
+    @JoinColumn(name = "formation_id", nullable = false)
     private Formation formation;
+
     private boolean  archive;
 }

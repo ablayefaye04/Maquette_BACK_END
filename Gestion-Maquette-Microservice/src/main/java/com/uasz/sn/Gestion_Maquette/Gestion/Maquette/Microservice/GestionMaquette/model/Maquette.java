@@ -1,13 +1,12 @@
 package com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionMaquette.model;
 
+import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionClasse.model.Classe;
+import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesUE.model.UE;
+import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionEnseignement.model.Enseignement;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uasz.sn.GestionEnseignement.GestionDeEmploiDuTemps.model.Enseignement;
-import uasz.sn.GestionEnseignement.GestionDesMaquettes.GestionClasse.model.Classe;
-import uasz.sn.GestionEnseignement.GestionDesMaquettes.GestionDesUE.model.UE;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,41 +16,18 @@ import java.util.List;
 @NoArgsConstructor
 @Table(
         name = "maquette",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"nom", "semestre"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"classe_id", "semestre"})}
 )
 public class Maquette {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
+    @Column(unique = true)
     private String nom;
-
     private int semestre;
+    private boolean archive;
+    private boolean active;
 
-    @Transient
-    private int credits;
-
-    @Transient
-    private int coeffUE;
-
-    @Transient
-    private int CMS;
-
-    @Transient
-    private int TDS;
-
-    @Transient
-    private int TPS;
-
-    @Transient
-    private int VHTS;
-
-    @Transient
-    private int TPES;
-
-    @Transient
-    private int coeffECs;
 
     @ManyToMany
     @JoinTable(
@@ -61,12 +37,11 @@ public class Maquette {
     )
     private List<UE> ueList = new ArrayList<>();
 
-    private boolean archive;
-    private boolean active;
-
     @ManyToOne
+    @JoinColumn(name = "classe_id", nullable = false)
     private Classe classe;
 
     @OneToMany(mappedBy = "maquette", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enseignement> enseignements = new ArrayList<>();
+
 }

@@ -1,10 +1,13 @@
 package com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesEC.model;
 
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesUE.model.UE;
+import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionEnseignement.model.Enseignement;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -31,9 +34,7 @@ public class EC {
     private boolean active;
     private boolean archive;
 
-   /* // L'association avec Enseignement est uniquement un @OneToMany
+    // L'association avec Enseignement est uniquement un @OneToMany
     @OneToMany(mappedBy = "ec", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Enseignement> enseignements;
-*/
-    // Le constructeur, getters et setters sont générés par Lombok
 }

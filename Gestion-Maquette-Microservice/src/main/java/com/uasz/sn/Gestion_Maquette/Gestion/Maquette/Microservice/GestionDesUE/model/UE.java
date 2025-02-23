@@ -1,6 +1,7 @@
 package com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesUE.model;
 
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesEC.model.EC;
+import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionMaquette.model.Maquette;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,8 +33,8 @@ public class UE {
 
     @OneToMany(mappedBy = "ue", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
     private List<EC> ecList = new ArrayList<>();
-/*
+
     @ManyToMany(mappedBy = "ueList")
     private List<Maquette> maquettes = new ArrayList<>();
-*/
+
 }

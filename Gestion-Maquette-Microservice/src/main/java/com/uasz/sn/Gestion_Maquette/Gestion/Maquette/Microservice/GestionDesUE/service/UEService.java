@@ -1,6 +1,7 @@
 package com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesUE.service;
 
 
+import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesEC.model.EC;
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesEC.repository.ECRepository;
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesEC.service.ECService;
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesUE.model.UE;
@@ -8,6 +9,7 @@ import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionDesUE.r
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -64,6 +66,9 @@ public class UEService {
             }
             ueRepository.save(ue);
         }
+    }
+    public List<UE> findByIds(Long[] ids) {
+        return ueRepository.findAllById(Arrays.asList(ids));
     }
 
     public void archiver(Long id){
