@@ -4,6 +4,8 @@ import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionClasse.
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionFormation.model.Formation;
 import com.uasz.sn.Gestion_Maquette.Gestion.Maquette.Microservice.GestionFormation.service.FormationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,51 +17,60 @@ public class FormationController {
     private FormationService formationService;
 
     @GetMapping("")
-    public List<Formation> voirFormations(){
-        return formationService.findAll();
+    public ResponseEntity<List<Formation>> voirFormations() {
+        List<Formation> formations = formationService.findAll();
+        return new ResponseEntity<>(formations, HttpStatus.OK);
     }
 
     @PostMapping("/ajouter")
-    public Formation ajouterFormation(@RequestBody Formation formation){
-        return formationService.create(formation);
+    public ResponseEntity<Formation> ajouterFormation(@RequestBody Formation formation) {
+        Formation nouvelleFormation = formationService.create(formation);
+        return new ResponseEntity<>(nouvelleFormation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/modifierFormation")
-    public Formation modifierFormation(@PathVariable Long id,@RequestBody Formation formation1){
+    public ResponseEntity<Formation> modifierFormation(@PathVariable Long id, @RequestBody Formation formation1) {
         Formation formation = formationService.findById(id);
-        if(formation1.getIntitule() != null){
+        if (formation == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (formation1.getIntitule() != null) {
             formation.setIntitule(formation1.getIntitule());
         }
         formation.setArchive(formation1.isArchive());
-        return formationService.update(formation);
+        Formation formationModifiee = formationService.update(formation);
+        return new ResponseEntity<>(formationModifiee, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/supprimerFormation")
-    public List<Formation> supprimerFormation(@PathVariable Long id){
+    public ResponseEntity<List<Formation>> supprimerFormation(@PathVariable Long id) {
         Formation formation = formationService.findById(id);
-        if(formation != null){
-            formationService.delete(formation);
+        if (formation == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return formationService.findAll();
+        formationService.delete(formation);
+        List<Formation> formations = formationService.findAll();
+        return new ResponseEntity<>(formations, HttpStatus.OK);
     }
 
-
-
     @PutMapping("/{id}/archiver")
-    public Formation archiver(@PathVariable Long id){
+    public ResponseEntity<Formation> archiver(@PathVariable Long id) {
         Formation formation = formationService.findById(id);
-        if(formation != null){
-            formationService.archiver(id);
+        if (formation == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return formationService.findAll()
-                .stream()
-                .filter(formation1 -> formation1.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Formation inexistante"));
+        formationService.archiver(id);
+        Formation formationArchivee = formationService.findById(id);
+        return new ResponseEntity<>(formationArchivee, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/classes")
-    public List<Classe> listeClasse(@PathVariable Long id){
-        return formationService.findById(id).getClasses();
+    public ResponseEntity<List<Classe>> listeClasse(@PathVariable Long id) {
+        Formation formation = formationService.findById(id);
+        if (formation == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<Classe> classes = formation.getClasses();
+        return new ResponseEntity<>(classes, HttpStatus.OK);
     }
 }
